@@ -1,14 +1,19 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public enum ControlMode { simple = 1, touch = 2 }
 
 
-public class VehicleControl : MonoBehaviour
-{
+public class VehicleControl : MonoBehaviour{
 
+    public bool IsAxisAvailable(string axisName){
+        try{
+            Input.GetAxis(axisName);
+            return true;
+        }catch (UnityException){
+            return false;
+        }
+    }
 
     public ControlMode controlMode = ControlMode.simple;
 
@@ -510,14 +515,17 @@ public class VehicleControl : MonoBehaviour
                         accel = Input.GetAxis("Vertical");
                     else
                         if(accel < 0)
-                            accel = accel + 1;                    
-                    brake = Input.GetAxis("Brake") > -0.5;
-                    if(!brake)
+                            accel = accel + 1;
+                    if (IsAxisAvailable("Brake")){
+                        brake = Input.GetAxis("Brake") > -0.5;
+                        if(!brake)
+                            brake = Input.GetButton("Jump");
+                        else{
+                            accel = -1;
+                            brake = false;
+                        }
+                    }else
                         brake = Input.GetButton("Jump");
-                    else{
-                        accel = -1;
-                        brake = false;
-                    }
                     shift = Input.GetKey(KeyCode.LeftShift) | Input.GetKey(KeyCode.RightShift);
                 }
 
