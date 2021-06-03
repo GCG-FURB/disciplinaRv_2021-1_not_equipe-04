@@ -502,16 +502,16 @@ public class VehicleControl : MonoBehaviour{
                 {
                     steer = Mathf.MoveTowards(steer, Input.GetAxis("Horizontal"), 0.2f);
                     accel = Input.GetAxis("Accelerator");
-                    if(accel == -1)
-                        accel = Input.GetAxis("Vertical");
-                    else
-                        if(accel < 0)
-                            accel = accel + 1;
-                    Debug.Log(Input.GetAxis("Brake"));
-                    brake = Input.GetAxis("Brake") > 0;
-                    if(!brake)
+                    brake = Input.GetAxis("Brake") > 0;                    
+                    if (!brake){
                         brake = Input.GetButton("Jump");
-                    else{
+                        if(accel == 0){
+                            accel = Input.GetAxis("Vertical");
+                        }else
+                            if(!brake
+                            && accel < 0)
+                                accel = accel + 1;
+                    }else{
                         accel = -1;
                         brake = false;
                     }
