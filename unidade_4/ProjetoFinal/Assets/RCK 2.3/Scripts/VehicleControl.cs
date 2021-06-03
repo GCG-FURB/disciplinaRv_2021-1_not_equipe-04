@@ -6,15 +6,6 @@ public enum ControlMode { simple = 1, touch = 2 }
 
 public class VehicleControl : MonoBehaviour{
 
-    public bool IsAxisAvailable(string axisName){
-        try{
-            Input.GetAxis(axisName);
-            return true;
-        }catch (UnityException){
-            return false;
-        }
-    }
-
     public ControlMode controlMode = ControlMode.simple;
 
     public bool activeControl = false;
@@ -516,16 +507,14 @@ public class VehicleControl : MonoBehaviour{
                     else
                         if(accel < 0)
                             accel = accel + 1;
-                    if (IsAxisAvailable("Brake")){
-                        brake = Input.GetAxis("Brake") > -0.5;
-                        if(!brake)
-                            brake = Input.GetButton("Jump");
-                        else{
-                            accel = -1;
-                            brake = false;
-                        }
-                    }else
+                    Debug.Log(Input.GetAxis("Brake"));
+                    brake = Input.GetAxis("Brake") > 0;
+                    if(!brake)
                         brake = Input.GetButton("Jump");
+                    else{
+                        accel = -1;
+                        brake = false;
+                    }
                     shift = Input.GetKey(KeyCode.LeftShift) | Input.GetKey(KeyCode.RightShift);
                 }
 
